@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class SpringBootSessionController {
+    
+    @Value("${base_url}")
+    private String base_url;
+    
     @PostMapping("/addNote")
     public String addNote(@RequestParam("note") String note, HttpServletRequest request) {
         //get the notes from request session
@@ -26,7 +30,7 @@ public class SpringBootSessionController {
         }
         notes.add(note);
         request.getSession().setAttribute("NOTES_SESSION", notes);
-        return "redirect:/home";
+        return "redirect:"+base_url+"/home";
     }
     @GetMapping("/home")
     public String home(Model model, HttpSession session) {
@@ -38,6 +42,6 @@ public class SpringBootSessionController {
     public String destroySession(HttpServletRequest request) {
         //invalidate the session , this will clear the data from configured database (Mysql/redis/hazelcast)
         request.getSession().invalidate();
-        return "redirect:/home";
+        return "redirect:"+base_url+"/home";
     }
 }
