@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class SpringBootSessionController {
@@ -19,7 +20,11 @@ public class SpringBootSessionController {
     private String base_url;
     
     @PostMapping("/addNote")
-    public String addNote(@RequestParam("note") String note, HttpServletRequest request) {
+    public ModelAndView addNote(@RequestParam("note") String note, HttpServletRequest request) {
+        
+        ModelAndView model = new ModelAndView();
+    	model.setViewName("home");
+        
         //get the notes from request session
         List<String> notes = (List<String>) request.getSession().getAttribute("NOTES_SESSION");
         //check if notes is present in session or not
@@ -30,7 +35,8 @@ public class SpringBootSessionController {
         }
         notes.add(note);
         request.getSession().setAttribute("NOTES_SESSION", notes);
-        return "redirect:"+base_url+"/home";
+        //return "redirect:"+base_url+"/home";
+        return model;
     }
     @GetMapping("/home")
     public String home(Model model, HttpSession session) {
